@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "308769128405",
+    "project_id": "top-worker-skills-devel-5l9k5x",
+    "storage_bucket": "top-worker-skills-devel-5l9k5x.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308769128405:android:68d268f265b0700e14475c",
+        "android_client_info": {
+          "package_name": "com.mycompany.topworkerskillsdevelopment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxFYID4NQytRUdg1w8iiRykkgmo5IYvFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

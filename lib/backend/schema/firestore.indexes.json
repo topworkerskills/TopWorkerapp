@@ -1,0 +1,36 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "Tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "Complete_Flag",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "Assignment_Reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "Due_Date",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "display_name",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "Assignments",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,95 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'operation_managementclass_model.dart';
 export 'operation_managementclass_model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:math'; 
+String generateCodeVerifier() {
+  const String validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+  final Random random = Random.secure();
+  final codeVerifier = List.generate(128, (index) => validChars[random.nextInt(validChars.length)]).join();
+  return codeVerifier;
+}
+
+String generateAuthorizationUrl(String codeVerifier) {
+  final clientId = 'ytkg5Z1XRgOEcBjc645Gkg';
+  final redirectUri = 'https://oauth.pstmn.io/v1/callback'; 
+  final authorizationUrl = 'https://zoom.us/oauth/authorize'
+      '?response_type=code'
+      '&client_id=$clientId'
+      '&redirect_uri=$redirectUri'
+      '&code_challenge=$codeVerifier'
+      '&code_challenge_method=S256';
+  return authorizationUrl;
+}
+
+Future<Map<String, dynamic>> generateAccessToken(String authorizationCode, String codeVerifier) async {
+  final clientId = 'ytkg5Z1XRgOEcBjc645Gkg';
+  final clientSecret = 'wawgGLjLSGPel4e7TRwxcEysShrThbhR';
+  final basicAuth = base64Encode(utf8.encode('$clientId:$clientSecret'));
+
+  final tokenEndpoint = 'https://zoom.us/oauth/token';
+
+  final response = await http.post(
+    Uri.parse(tokenEndpoint),
+    headers: {
+      'Authorization': 'Basic $basicAuth',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: {
+      'code': 'tLl3dmG3EjtDK-aBtZURW23imwf3_bWIQ',
+      'grant_type': 'authorization_code',
+      'redirect_uri': 'https://oauth.pstmn.io/v1/callback', 
+      'code_verifier': codeVerifier,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  } else {
+    throw Exception('Failed to generate access token: ${response.statusCode}');
+  }
+}
+Future<String> createZoomMeeting(String accessToken) async {
+  final apiUrl = 'https://api.zoom.us/v2/users/me/meetings';
+
+  final response = await http.post(
+    Uri.parse(apiUrl),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      "agenda": "My Meeting",
+      "start_time": "2024-02-03T19:30:00Z",
+      "timezone": "Asia/Kolkata",
+      "duration": 60,
+      "password": "123456",
+      "settings": {
+        "host_video": true,
+        "participant_video": true,
+        "join_before_host": false,
+        "mute_upon_entry": false,
+        "waiting_room": false,
+        "auto_recording": "cloud",
+        "allow_multiple_devices": true,
+        "audio": "both",
+        "registrants_confirmation_email": true,
+        "registrants_email_notification": true,
+        "use_pmi": false,
+        "watermark": false
+      },
+      "type": 2
+    }),
+  );
+
+  if (response.statusCode == 201) {
+    final responseData = json.decode(response.body);
+    return responseData['join_url'];
+  } else {
+    throw Exception('Failed to create Zoom meeting: ${response.statusCode}');
+  }
+}
 
 class OperationManagementclassWidget extends StatefulWidget {
   const OperationManagementclassWidget({super.key});

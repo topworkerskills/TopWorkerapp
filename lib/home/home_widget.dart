@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -6,7 +7,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'home_model.dart';
 export 'home_model.dart';
@@ -222,15 +222,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -251,35 +242,342 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 30.0,
-                  height: 30.0,
+                  width: 60.0,
+                  height: 60.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
-                  child: FlutterFlowIconButton(
-                    borderColor: FlutterFlowTheme.of(context).primaryBackground,
-                    borderRadius: 20.0,
-                    borderWidth: 0.0,
-                    buttonSize: 40.0,
-                    fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                    icon: Icon(
-                      Icons.menu_open,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24.0,
-                    ),
-                    onPressed: () async {
-                      if (scaffoldKey.currentState!.isDrawerOpen ||
-                          scaffoldKey.currentState!.isEndDrawerOpen) {
-                        Navigator.pop(context);
-                      }
-                    },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      FlutterFlowIconButton(
+                        borderColor:
+                            FlutterFlowTheme.of(context).primaryBackground,
+                        borderRadius: 20.0,
+                        borderWidth: 0.0,
+                        buttonSize: 40.0,
+                        fillColor:
+                            FlutterFlowTheme.of(context).primaryBackground,
+                        icon: Icon(
+                          Icons.menu_open,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 44.0,
+                        ),
+                        onPressed: () async {
+                          if (scaffoldKey.currentState!.isDrawerOpen ||
+                              scaffoldKey.currentState!.isEndDrawerOpen) {
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                Container(
-                  width: 100.0,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      Container(
+                        width: 100.0,
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Align(
+                          alignment: const AlignmentDirectional(0.0, 0.0),
+                          child: Text(
+                            'TopWorker ',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('prof');
+                          },
+                          child: Text(
+                            'Profile',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 25.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('Assignment_submit');
+                          },
+                          child: Text(
+                            'Add Assignment',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 25.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            await launchURL('https://wa.me/8417893317');
+                          },
+                          child: Text(
+                            'Contact Us',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 25.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('home');
+                          },
+                          child: Text(
+                            'Abour Us',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 25.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 20.0, 0.0, 20.0),
+                        child: Text(
+                          'Refer and Earn',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Inter',
+                                    fontSize: 25.0,
+                                  ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('List02Products');
+                          },
+                          child: Text(
+                            'Webinar',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('Courses');
+                          },
+                          child: Text(
+                            'Courses',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('websupport');
+                          },
+                          child: Text(
+                            'Personal Development ',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 25.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('profile');
+                          },
+                          child: Text(
+                            'Edit Profile',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('Study');
+                          },
+                          child: Text(
+                            'Resume Builder',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('websupport');
+                          },
+                          child: Text(
+                            'Books & Merchandise',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 25.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('Termsandconditions');
+                          },
+                          child: Text(
+                            'Terms and Conditions',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('PrivacyPolicy');
+                          },
+                          child: Text(
+                            'Privacy Policy',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24.0,
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -338,14 +636,16 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               context: context,
                               tabletLandscape: false,
                             ))
-                              Text(
-                                'Hello, Max Rosco',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                      fontFamily: 'Sora',
-                                      fontSize: 19.0,
-                                    ),
+                              AuthUserStreamWidget(
+                                builder: (context) => Text(
+                                  currentUserDisplayName,
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleLarge
+                                      .override(
+                                        fontFamily: 'Sora',
+                                        fontSize: 19.0,
+                                      ),
+                                ),
                               ),
                           ],
                         ),
@@ -416,7 +716,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'https://picsum.photos/seed/509/600',
+                                'https://images.unsplash.com/photo-1570126618953-d437176e8c79?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw0fHxDb21wYW5pZXN8ZW58MHx8fHwxNzA3MDY2OTA2fDA&ixlib=rb-4.0.3&q=80&w=1080',
                                 width: 300.0,
                                 height: 200.0,
                                 fit: BoxFit.cover,
@@ -425,7 +725,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'https://picsum.photos/seed/45/600',
+                                'https://images.unsplash.com/photo-1507207611509-ec012433ff52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw0fHxXb3JraW5nJTIwcHJvfGVufDB8fHx8MTcwNzA2NjkzMnww&ixlib=rb-4.0.3&q=80&w=1080',
                                 width: 300.0,
                                 height: 200.0,
                                 fit: BoxFit.cover,
@@ -434,7 +734,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'https://picsum.photos/seed/644/600',
+                                'https://images.unsplash.com/photo-1516321165247-4aa89a48be28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxMnx8d2ViaW5hcnxlbnwwfHx8fDE3MDcwNjA2OTh8MA&ixlib=rb-4.0.3&q=80&w=1080',
                                 width: 300.0,
                                 height: 200.0,
                                 fit: BoxFit.cover,
@@ -442,8 +742,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             ),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                'https://picsum.photos/seed/249/600',
+                              child: Image.asset(
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? 'assets/images/topworker-removebg-preview__1_-removebg-preview_(1).png'
+                                    : 'assets/images/topworker-removebg-preview__1_-removebg-preview_(1).png',
                                 width: 300.0,
                                 height: 200.0,
                                 fit: BoxFit.cover,
@@ -683,91 +985,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 12.0, 12.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          SizedBox(
-                                            width: 150.0,
-                                            child: Stack(
-                                              alignment: const AlignmentDirectional(
-                                                  -1.0, 0.0),
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      const AlignmentDirectional(
-                                                          -0.91, 0.0),
-                                                  child: Container(
-                                                    width: 28.0,
-                                                    height: 28.0,
-                                                    clipBehavior:
-                                                        Clip.antiAlias,
-                                                    decoration: const BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: Image.network(
-                                                      'https://images.unsplash.com/photo-1610737241336-371badac3b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      const AlignmentDirectional(
-                                                          -0.62, 0.0),
-                                                  child: Container(
-                                                    width: 28.0,
-                                                    height: 28.0,
-                                                    clipBehavior:
-                                                        Clip.antiAlias,
-                                                    decoration: const BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: Image.network(
-                                                      'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      const AlignmentDirectional(
-                                                          -0.35, 0.0),
-                                                  child: Container(
-                                                    width: 28.0,
-                                                    height: 28.0,
-                                                    clipBehavior:
-                                                        Clip.antiAlias,
-                                                    decoration: const BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                    ),
-                                                    child: Image.network(
-                                                      'https://images.unsplash.com/photo-1598346762291-aee88549193f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                                      fit: BoxFit.fitHeight,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 8.0, 0.0),
-                                            child: Text(
-                                              '30%',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
@@ -904,95 +1121,106 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               0.0, 12.0, 16.0, 12.0),
-                          child: Container(
-                            width: 230.0,
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 140.0,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        FlutterFlowTheme.of(context).tertiary,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: Image.network(
-                                        'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw0fHxIdW1hbiUyMHJlc291cmNlfGVufDB8fHx8MTcwNjM0MTY4Mnww&ixlib=rb-4.0.3&q=80&w=1080',
-                                      ).image,
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              context.pushNamed('FinanceCLass');
+                            },
+                            child: Container(
+                              width: 230.0,
+                              height: 50.0,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 140.0,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          FlutterFlowTheme.of(context).tertiary,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: Image.network(
+                                          'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw0fHxIdW1hbiUyMHJlc291cmNlfGVufDB8fHx8MTcwNjM0MTY4Mnww&ixlib=rb-4.0.3&q=80&w=1080',
+                                        ).image,
+                                      ),
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(0.0),
+                                        bottomRight: Radius.circular(0.0),
+                                        topLeft: Radius.circular(12.0),
+                                        topRight: Radius.circular(12.0),
+                                      ),
                                     ),
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(0.0),
-                                      bottomRight: Radius.circular(0.0),
-                                      topLeft: Radius.circular(12.0),
-                                      topRight: Radius.circular(12.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 36.0,
+                                            height: 36.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                            ),
+                                            alignment:
+                                                const AlignmentDirectional(0.0, 0.0),
+                                            child: const Icon(
+                                              Icons.design_services_outlined,
+                                              color: Colors.white,
+                                              size: 20.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Finance Program',
+                                            style: FlutterFlowTheme.of(context)
+                                                .titleMedium
+                                                .override(
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.white,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        12.0, 12.0, 12.0, 0.0),
+                                    child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: 36.0,
-                                          height: 36.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 8.0, 0.0),
+                                          child: Text(
+                                            '30%',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium,
                                           ),
-                                          alignment:
-                                              const AlignmentDirectional(0.0, 0.0),
-                                          child: const Icon(
-                                            Icons.design_services_outlined,
-                                            color: Colors.white,
-                                            size: 20.0,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Finance Program',
-                                          style: FlutterFlowTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                fontFamily: 'Inter',
-                                                color: Colors.white,
-                                              ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      12.0, 12.0, 12.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 8.0, 0.0),
-                                        child: Text(
-                                          '30%',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ).animateOnPageLoad(
                               animationsMap['containerOnPageLoadAnimation3']!),
@@ -1007,145 +1235,78 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               color: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 140.0,
-                                  decoration: BoxDecoration(
-                                    color:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: Image.network(
-                                        'https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHx3ZWJ8ZW58MHx8fHwxNzA2MzQxNTk2fDA&ixlib=rb-4.0.3&q=80&w=1080',
-                                      ).image,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(0.0),
-                                      bottomRight: Radius.circular(0.0),
-                                      topLeft: Radius.circular(12.0),
-                                      topRight: Radius.circular(12.0),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          width: 36.0,
-                                          height: 36.0,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          alignment:
-                                              const AlignmentDirectional(0.0, 0.0),
-                                          child: const Icon(
-                                            Icons.desktop_windows,
-                                            color: Colors.white,
-                                            size: 20.0,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Web Development Program',
-                                          style: FlutterFlowTheme.of(context)
-                                              .titleMedium
-                                              .override(
-                                                fontFamily: 'Inter',
-                                                color: Colors.white,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      12.0, 12.0, 12.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: 150.0,
-                                        child: Stack(
-                                          alignment:
-                                              const AlignmentDirectional(-1.0, 0.0),
-                                          children: [
-                                            Align(
-                                              alignment: const AlignmentDirectional(
-                                                  -0.91, 0.0),
-                                              child: Container(
-                                                width: 28.0,
-                                                height: 28.0,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image.network(
-                                                  'https://images.unsplash.com/photo-1610737241336-371badac3b66?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: const AlignmentDirectional(
-                                                  -0.62, 0.0),
-                                              child: Container(
-                                                width: 28.0,
-                                                height: 28.0,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image.network(
-                                                  'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDJ8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                                  fit: BoxFit.fitWidth,
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: const AlignmentDirectional(
-                                                  -0.35, 0.0),
-                                              child: Container(
-                                                width: 28.0,
-                                                height: 28.0,
-                                                clipBehavior: Clip.antiAlias,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image.network(
-                                                  'https://images.unsplash.com/photo-1598346762291-aee88549193f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTV8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                                  fit: BoxFit.fitHeight,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                context.pushNamed('MarketingManagement');
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 140.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: Image.network(
+                                          'https://images.unsplash.com/photo-1498050108023-c5249f4df085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHx3ZWJ8ZW58MHx8fHwxNzA2MzQxNTk2fDA&ixlib=rb-4.0.3&q=80&w=1080',
+                                        ).image,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 8.0, 0.0),
-                                        child: Text(
-                                          '30%',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
-                                        ),
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(0.0),
+                                        bottomRight: Radius.circular(0.0),
+                                        topLeft: Radius.circular(12.0),
+                                        topRight: Radius.circular(12.0),
                                       ),
-                                    ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 36.0,
+                                            height: 36.0,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                            ),
+                                            alignment:
+                                                const AlignmentDirectional(0.0, 0.0),
+                                            child: const Icon(
+                                              Icons.desktop_windows,
+                                              color: Colors.white,
+                                              size: 20.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Marketing Management',
+                                            style: FlutterFlowTheme.of(context)
+                                                .titleMedium
+                                                .override(
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.white,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ).animateOnPageLoad(
                               animationsMap['containerOnPageLoadAnimation4']!),
@@ -1165,7 +1326,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    'List13PropertyListview',
+                                    'Courses',
                                     extra: <String, dynamic>{
                                       kTransitionInfoKey: const TransitionInfo(
                                         hasTransition: true,
@@ -1217,7 +1378,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 350.0,
+                  height: 380.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -1239,91 +1400,120 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             width: 1.0,
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(4.0),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1470162656305-6f429ba817bf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyMnx8dGVhfGVufDB8fHx8MTcwNjU2MTE2OHww&ixlib=rb-4.0.3&q=80&w=400',
-                                  width: double.infinity,
-                                  height: 200.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Looking For a Job?\nTime to enhance your career with our Personalized Placements and Job Guarantees.',
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 30.0, 0.0, 0.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      child: Image.network(
+                                        'https://images.unsplash.com/photo-1549923746-c502d488b3ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxN3x8Sm9ifGVufDB8fHx8MTcwNzA2MDI0MHww&ixlib=rb-4.0.3&q=80&w=1080',
+                                        width: double.infinity,
+                                        height: 200.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        4.0, 0.0, 4.0, 0.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Looking For a Job?\nTime to enhance your career with our Personalized Placements and Job Guarantees.',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyLarge
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primary,
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                        ),
+                                              ),
+                                            ].divide(const SizedBox(height: 4.0)),
+                                          ),
+                                        ),
+                                        RichText(
+                                          textScaleFactor:
+                                              MediaQuery.of(context)
+                                                  .textScaleFactor,
+                                          text: TextSpan(
+                                            children: const [
+                                              TextSpan(
+                                                text: 'Join Now',
+                                                style: TextStyle(),
+                                              ),
+                                              TextSpan(
+                                                text: '',
+                                                style: TextStyle(),
+                                              )
+                                            ],
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyLarge
-                                                .override(
-                                                  fontFamily: 'Inter',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  fontWeight: FontWeight.w800,
-                                                ),
+                                                .labelSmall,
                                           ),
-                                        ].divide(const SizedBox(height: 4.0)),
-                                      ),
-                                    ),
-                                    RichText(
-                                      textScaleFactor: MediaQuery.of(context)
-                                          .textScaleFactor,
-                                      text: TextSpan(
-                                        children: const [
-                                          TextSpan(
-                                            text: 'Join Now',
-                                            style: TextStyle(),
+                                        ),
+                                        FlutterFlowIconButton(
+                                          borderColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                          borderRadius: 20.0,
+                                          borderWidth: 1.0,
+                                          buttonSize: 40.0,
+                                          fillColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .accent1,
+                                          icon: Icon(
+                                            Icons.join_left,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                            size: 24.0,
                                           ),
-                                          TextSpan(
-                                            text: '',
-                                            style: TextStyle(),
-                                          )
-                                        ],
-                                        style: FlutterFlowTheme.of(context)
-                                            .labelSmall,
-                                      ),
+                                          onPressed: () async {
+                                            await launchURL(
+                                                'https://wa.me/8417893317');
+                                          },
+                                        ),
+                                      ].divide(const SizedBox(width: 8.0)),
                                     ),
-                                    FlutterFlowIconButton(
-                                      borderColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      borderRadius: 20.0,
-                                      borderWidth: 1.0,
-                                      buttonSize: 40.0,
-                                      fillColor:
-                                          FlutterFlowTheme.of(context).accent1,
-                                      icon: Icon(
-                                        Icons.join_left,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        size: 24.0,
-                                      ),
-                                      onPressed: () {
-                                        print('IconButton pressed ...');
-                                      },
-                                    ),
-                                  ].divide(const SizedBox(width: 8.0)),
-                                ),
+                                  ),
+                                ].divide(const SizedBox(height: 8.0)),
                               ),
-                            ].divide(const SizedBox(height: 8.0)),
-                          ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 30.0),
+                              child: Text(
+                                'Jobs ',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -1331,7 +1521,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 380.0,
+                  height: 400.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -1413,7 +1603,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       0.0, 12.0, 0.0, 12.0),
                                   child: Text(
-                                    '\$320k',
+                                    'Open in \n22 States',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .displaySmall
@@ -1421,6 +1611,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                           fontFamily: 'Sora',
                                           color:
                                               FlutterFlowTheme.of(context).info,
+                                          fontSize: 25.0,
                                         ),
                                   ),
                                 ),
@@ -1459,10 +1650,14 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       0.0, 12.0, 0.0, 12.0),
                                   child: Text(
-                                    '\$45.6M',
+                                    '5.6k Jobs Provided',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
-                                        .displaySmall,
+                                        .displaySmall
+                                        .override(
+                                          fontFamily: 'Sora',
+                                          fontSize: 28.0,
+                                        ),
                                   ),
                                 ),
                                 Text(
@@ -1500,10 +1695,14 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       0.0, 12.0, 0.0, 12.0),
                                   child: Text(
-                                    '56.4k',
+                                    'Top\nCompanies ',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
-                                        .displaySmall,
+                                        .displaySmall
+                                        .override(
+                                          fontFamily: 'Sora',
+                                          fontSize: 25.0,
+                                        ),
                                   ),
                                 ),
                                 Text(
@@ -1521,9 +1720,149 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Text(
-                  'Join us now and take advantag of our upcoming one-on-one sessions for all your preparations ',
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+                Container(
+                  width: double.infinity,
+                  height: 400.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        FlutterFlowTheme.of(context).primaryBackground,
+                        FlutterFlowTheme.of(context).secondary,
+                        FlutterFlowTheme.of(context).primary
+                      ],
+                      stops: const [0.0, 1.0, 1.0],
+                      begin: const AlignmentDirectional(0.0, -1.0),
+                      end: const AlignmentDirectional(0, 1.0),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyfHx3ZWJpbmFyfGVufDB8fHx8MTcwNzA2MDY5OHww&ixlib=rb-4.0.3&q=80&w=1080',
+                            width: double.infinity,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: const AlignmentDirectional(0.0, 0.65),
+                        child: Text(
+                          'Join our Upcoming Webinars And Collect Certificates from World renowned Entrepreneurs, Scientists, Artists and Dignitaries',
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: 'Inter',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w900,
+                              ),
+                        ),
+                      ),
+                      Align(
+                        alignment: const AlignmentDirectional(1.0, 1.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            context.pushNamed('Study');
+                          },
+                          text: 'Join Now',
+                          options: FFButtonOptions(
+                            height: 40.0,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).primary,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Inter',
+                                  color: Colors.white,
+                                ),
+                            elevation: 3.0,
+                            borderSide: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 400.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                          'Resume Builder',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Inter',
+                                    fontSize: 28.0,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            'https://images.unsplash.com/photo-1575470522418-b88b692b8084?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw0fHxsZWdvfGVufDB8fHx8MTcwNzA0NTc1OHww&ixlib=rb-4.0.3&q=80&w=1080',
+                            width: double.infinity,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        FFButtonWidget(
+                          onPressed: () async {
+                            context.pushNamed('Study');
+                          },
+                          text: 'Button',
+                          options: FFButtonOptions(
+                            height: 40.0,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).primary,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Inter',
+                                  color: Colors.white,
+                                ),
+                            elevation: 3.0,
+                            borderSide: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        Text(
+                          'Get the Company Standard Resume and Rock your Day with our Company Designed and Tailored Resume For your dream job ',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Inter',
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

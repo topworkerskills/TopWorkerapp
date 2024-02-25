@@ -365,6 +365,8 @@ class _CreateMilestoneWidgetState extends State<CreateMilestoneWidget>
                                     FlutterFlowTheme.of(context).titleSmall,
                                 inactiveDateStyle:
                                     FlutterFlowTheme.of(context).labelMedium,
+                                locale:
+                                    FFLocalizations.of(context).languageCode,
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(

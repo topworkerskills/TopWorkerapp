@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 
 class AssignmentRecord extends FirestoreRecord {
   AssignmentRecord._(
-    super.reference,
-    super.data,
-  ) {
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 

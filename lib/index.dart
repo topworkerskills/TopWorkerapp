@@ -7,8 +7,7 @@ export '/forgotpassword/forgotpassword_widget.dart' show ForgotpasswordWidget;
 export '/prof/prof_widget.dart' show ProfWidget;
 export '/profile/profile_widget.dart' show ProfileWidget;
 export '/list02_products/list02_products_widget.dart' show List02ProductsWidget;
-export '/list13_property_listview/list13_property_listview_widget.dart'
-    show List13PropertyListviewWidget;
+export '/websupport/websupport_widget.dart' show WebsupportWidget;
 export '/study/study_widget.dart' show StudyWidget;
 export '/assignment_submit/assignment_submit_widget.dart'
     show AssignmentSubmitWidget;
@@ -28,4 +27,7 @@ export '/electrical_c_lass/electrical_c_lass_widget.dart'
     show ElectricalCLassWidget;
 export '/mechanical_class/mechanical_class_widget.dart'
     show MechanicalClassWidget;
-export '/tobedeleted/tobedeleted_widget.dart' show TobedeletedWidget;
+export '/courses/courses_widget.dart' show CoursesWidget;
+export '/termsandconditions/termsandconditions_widget.dart'
+    show TermsandconditionsWidget;
+export '/privacy_policy/privacy_policy_widget.dart' show PrivacyPolicyWidget;

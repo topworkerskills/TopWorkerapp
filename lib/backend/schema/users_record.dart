@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 
 class UsersRecord extends FirestoreRecord {
   UsersRecord._(
-    super.reference,
-    super.data,
-  ) {
+    DocumentReference reference,
+    Map<String, dynamic> data,
+  ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -50,6 +49,11 @@ class UsersRecord extends FirestoreRecord {
   List<DocumentReference> get assignments => _assignments ?? const [];
   bool hasAssignments() => _assignments != null;
 
+  // "Courses" field.
+  List<DocumentReference>? _courses;
+  List<DocumentReference> get courses => _courses ?? const [];
+  bool hasCourses() => _courses != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -58,6 +62,7 @@ class UsersRecord extends FirestoreRecord {
     _createdTime = snapshotData['created_time'] as DateTime?;
     _phoneNumber = snapshotData['phone_number'] as String?;
     _assignments = getDataList(snapshotData['Assignments']);
+    _courses = getDataList(snapshotData['Courses']);
   }
 
   static CollectionReference get collection =>
@@ -127,7 +132,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.uid == e2?.uid &&
         e1?.createdTime == e2?.createdTime &&
         e1?.phoneNumber == e2?.phoneNumber &&
-        listEquality.equals(e1?.assignments, e2?.assignments);
+        listEquality.equals(e1?.assignments, e2?.assignments) &&
+        listEquality.equals(e1?.courses, e2?.courses);
   }
 
   @override
@@ -138,7 +144,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.uid,
         e?.createdTime,
         e?.phoneNumber,
-        e?.assignments
+        e?.assignments,
+        e?.courses
       ]);
 
   @override

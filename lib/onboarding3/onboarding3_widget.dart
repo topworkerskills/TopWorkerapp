@@ -2,7 +2,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'onboarding3_model.dart';
 export 'onboarding3_model.dart';
@@ -36,15 +35,6 @@ class _Onboarding3WidgetState extends State<Onboarding3Widget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     return Opacity(
       opacity: 0.9,
       child: GestureDetector(
@@ -63,6 +53,14 @@ class _Onboarding3WidgetState extends State<Onboarding3Widget> {
               ),
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: Image.asset(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? 'assets/images/entrepreneur-business-corporate-office-workplace-working-laptop-using-wireless-mouse.jpg'
+                        : 'assets/images/entrepreneur-business-corporate-office-workplace-working-laptop-using-wireless-mouse.jpg',
+                  ).image,
+                ),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -72,32 +70,8 @@ class _Onboarding3WidgetState extends State<Onboarding3Widget> {
                       opacity: 0.6,
                       child: Container(
                         width: double.infinity,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.asset(
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? 'assets/images/entrepreneur-business-corporate-office-workplace-working-laptop-using-wireless-mouse.jpg'
-                                  : 'assets/images/entrepreneur-business-corporate-office-workplace-working-laptop-using-wireless-mouse.jpg',
-                            ).image,
-                          ),
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 4.0,
-                              color: Color(0x33000000),
-                              offset: Offset(0.0, 2.0),
-                              spreadRadius: 28.0,
-                            )
-                          ],
-                          gradient: LinearGradient(
-                            colors: [
-                              FlutterFlowTheme.of(context).primary,
-                              FlutterFlowTheme.of(context).secondary
-                            ],
-                            stops: const [0.0, 1.0],
-                            begin: const AlignmentDirectional(0.0, -1.0),
-                            end: const AlignmentDirectional(0, 1.0),
-                          ),
+                        decoration: const BoxDecoration(
+                          color: Color(0x00F83B46),
                         ),
                         child: Align(
                           alignment: const AlignmentDirectional(0.0, 1.0),
@@ -110,7 +84,10 @@ class _Onboarding3WidgetState extends State<Onboarding3Widget> {
                                   .titleMedium
                                   .override(
                                     fontFamily: 'Inter',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
                                     fontSize: 36.0,
+                                    fontWeight: FontWeight.w900,
                                   ),
                             ),
                           ),

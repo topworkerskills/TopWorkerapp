@@ -9,7 +9,9 @@ import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 
@@ -19,6 +21,10 @@ void main() async {
   await initFirebase();
 
   await FlutterFlowTheme.initialize();
+
+  if (!kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  }
 
   runApp(const MyApp());
 }
@@ -87,7 +93,9 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       locale: _locale,
-      supportedLocales: const [Locale('en', '')],
+      supportedLocales: const [
+        Locale('en'),
+      ],
       theme: ThemeData(
         brightness: Brightness.light,
       ),
@@ -101,7 +109,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class NavBarPage extends StatefulWidget {
-  const NavBarPage({super.key, this.initialPage, this.page});
+  const NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
 
   final String? initialPage;
   final Widget? page;
@@ -126,133 +134,62 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'home': const HomeWidget(),
-      'List13PropertyListview': const List13PropertyListviewWidget(),
+      'websupport': const WebsupportWidget(),
       'Study': const StudyWidget(),
       'Projects': const ProjectsWidget(),
+      'Courses': const CoursesWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
-    final MediaQueryData queryData = MediaQuery.of(context);
-
     return Scaffold(
-      body: MediaQuery(
-          data: queryData
-              .removeViewInsets(removeBottom: true)
-              .removeViewPadding(removeBottom: true),
-          child: _currentPage ?? tabs[_currentPageName]!),
-      extendBody: true,
-      bottomNavigationBar: FloatingNavbar(
-        currentIndex: currentIndex,
-        onTap: (i) => setState(() {
+      body: _currentPage ?? tabs[_currentPageName],
+      bottomNavigationBar: GNav(
+        selectedIndex: currentIndex,
+        onTabChange: (i) => setState(() {
           _currentPage = null;
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: Colors.white,
-        selectedItemColor: FlutterFlowTheme.of(context).primary,
-        unselectedItemColor: const Color(0x8A000000),
-        selectedBackgroundColor: const Color(0x00000000),
-        borderRadius: 8.0,
-        itemBorderRadius: 8.0,
-        margin: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+        color: FlutterFlowTheme.of(context).primary,
+        activeColor: FlutterFlowTheme.of(context).primary,
+        tabBackgroundColor: FlutterFlowTheme.of(context).primary,
+        tabBorderRadius: 100.0,
+        tabMargin: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
         padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-        width: double.infinity,
-        elevation: 0.0,
-        items: [
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.home_outlined,
-                  color: currentIndex == 0
-                      ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
-                  size: 24.0,
+        gap: 0.0,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        duration: const Duration(milliseconds: 500),
+        haptic: false,
+        tabs: [
+          GButton(
+            icon: Icons.home_outlined,
+            text: 'Home',
+            textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+                  fontFamily: 'Inter',
+                  color: FlutterFlowTheme.of(context).primaryText,
                 ),
-                Text(
-                  'Home',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 0
-                        ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
-                    fontSize: 11.0,
-                  ),
-                ),
-              ],
-            ),
+            iconSize: 24.0,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.home_outlined,
-                  color: currentIndex == 1
-                      ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
-                  size: 24.0,
-                ),
-                Text(
-                  'Home',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 1
-                        ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
-                    fontSize: 11.0,
-                  ),
-                ),
-              ],
-            ),
+          const GButton(
+            icon: Icons.laptop_mac,
+            text: 'Webinar',
+            iconSize: 24.0,
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.home_outlined,
-                  color: currentIndex == 2
-                      ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
-                  size: 24.0,
-                ),
-                Text(
-                  'Home',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 2
-                        ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
-                    fontSize: 11.0,
-                  ),
-                ),
-              ],
-            ),
+          const GButton(
+            icon: Icons.menu_book_outlined,
+            text: 'Study',
+            iconSize: 24.0,
           ),
-          FloatingNavbarItem(
-            customWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.assignment,
-                  color: currentIndex == 3
-                      ? FlutterFlowTheme.of(context).primary
-                      : const Color(0x8A000000),
-                  size: 24.0,
-                ),
-                Text(
-                  '__',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 3
-                        ? FlutterFlowTheme.of(context).primary
-                        : const Color(0x8A000000),
-                    fontSize: 11.0,
-                  ),
-                ),
-              ],
-            ),
+          const GButton(
+            icon: Icons.assignment,
+            text: '__',
+            iconSize: 24.0,
+          ),
+          const GButton(
+            icon: Icons.format_list_bulleted_rounded,
+            text: 'Courses',
+            iconSize: 24.0,
           )
         ],
       ),

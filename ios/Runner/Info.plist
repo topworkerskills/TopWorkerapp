@@ -54,10 +54,11 @@
 	<true/>
 
 	<key>NSCameraUsageDescription</key>
-    <string>In order to take a picture or video, this app requires permission to access the camera.</string>
+    <string>Switch on Camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>In order to upload data, this app requires permission to access the photo library.</string>
-
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Switch On  Microphone</string>
 
 
 	<key>UILaunchStoryboardName</key>

@@ -1,102 +1,35 @@
+import '/auth/base_auth_user_provider.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
+import '/components/pre_joining_dialog_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/widgets/index.dart' as custom_widgets;
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
 import 'operation_managementclass_model.dart';
 export 'operation_managementclass_model.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'dart:math'; 
-String generateCodeVerifier() {
-  const String validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-  final Random random = Random.secure();
-  final codeVerifier = List.generate(128, (index) => validChars[random.nextInt(validChars.length)]).join();
-  return codeVerifier;
-}
-
-String generateAuthorizationUrl(String codeVerifier) {
-  final clientId = 'ytkg5Z1XRgOEcBjc645Gkg';
-  final redirectUri = 'https://oauth.pstmn.io/v1/callback'; 
-  final authorizationUrl = 'https://zoom.us/oauth/authorize'
-      '?response_type=code'
-      '&client_id=$clientId'
-      '&redirect_uri=$redirectUri'
-      '&code_challenge=$codeVerifier'
-      '&code_challenge_method=S256';
-  return authorizationUrl;
-}
-
-Future<Map<String, dynamic>> generateAccessToken(String authorizationCode, String codeVerifier) async {
-  final clientId = 'ytkg5Z1XRgOEcBjc645Gkg';
-  final clientSecret = 'wawgGLjLSGPel4e7TRwxcEysShrThbhR';
-  final basicAuth = base64Encode(utf8.encode('$clientId:$clientSecret'));
-
-  final tokenEndpoint = 'https://zoom.us/oauth/token';
-
-  final response = await http.post(
-    Uri.parse(tokenEndpoint),
-    headers: {
-      'Authorization': 'Basic $basicAuth',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: {
-      'code': 'tLl3dmG3EjtDK-aBtZURW23imwf3_bWIQ',
-      'grant_type': 'authorization_code',
-      'redirect_uri': 'https://oauth.pstmn.io/v1/callback', 
-      'code_verifier': codeVerifier,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    return json.decode(response.body);
-  } else {
-    throw Exception('Failed to generate access token: ${response.statusCode}');
-  }
-}
-Future<String> createZoomMeeting(String accessToken) async {
-  final apiUrl = 'https://api.zoom.us/v2/users/me/meetings';
-
-  final response = await http.post(
-    Uri.parse(apiUrl),
-    headers: {
-      'Authorization': 'Bearer $accessToken',
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      "agenda": "My Meeting",
-      "start_time": "2024-02-03T19:30:00Z",
-      "timezone": "Asia/Kolkata",
-      "duration": 60,
-      "password": "123456",
-      "settings": {
-        "host_video": true,
-        "participant_video": true,
-        "join_before_host": false,
-        "mute_upon_entry": false,
-        "waiting_room": false,
-        "auto_recording": "cloud",
-        "allow_multiple_devices": true,
-        "audio": "both",
-        "registrants_confirmation_email": true,
-        "registrants_email_notification": true,
-        "use_pmi": false,
-        "watermark": false
-      },
-      "type": 2
-    }),
-  );
-
-  if (response.statusCode == 201) {
-    final responseData = json.decode(response.body);
-    return responseData['join_url'];
-  } else {
-    throw Exception('Failed to create Zoom meeting: ${response.statusCode}');
-  }
-}
 
 class OperationManagementclassWidget extends StatefulWidget {
-  const OperationManagementclassWidget({super.key});
+  const OperationManagementclassWidget({
+    super.key,
+    bool? videoMeet,
+    this.appId,
+    this.channelName,
+    this.token,
+    bool? isMicEnabled,
+    bool? isVideoEnabled,
+  })  : videoMeet = videoMeet ?? false,
+        isMicEnabled = isMicEnabled ?? false,
+        isVideoEnabled = isVideoEnabled ?? false;
+
+  final bool videoMeet;
+  final String? appId;
+  final String? channelName;
+  final String? token;
+  final bool isMicEnabled;
+  final bool isVideoEnabled;
 
   @override
   State<OperationManagementclassWidget> createState() =>
@@ -114,6 +47,13 @@ class _OperationManagementclassWidgetState
     super.initState();
     _model = createModel(context, () => OperationManagementclassModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        _model.videoMeet = widget.videoMeet;
+      });
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -126,15 +66,6 @@ class _OperationManagementclassWidgetState
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -163,318 +94,184 @@ class _OperationManagementclassWidgetState
         centerTitle: false,
         elevation: 0.0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: Image.network(
-                  'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8eW9nYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: 230.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Class Name',
-                    style: FlutterFlowTheme.of(context).headlineMedium,
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.videoMeet)
+                  SizedBox(
+                    width: 400.0,
+                    height: 300.0,
+                    child: custom_widgets.VideoCall(
+                      width: 400.0,
+                      height: 300.0,
+                      appId: widget.appId!,
+                      channelName: widget.channelName!,
+                      tempToken: widget.token!,
+                    ),
                   ),
+                if (widget.videoMeet == false)
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
-                    child: Text(
-                      '10:00am',
-                      style: FlutterFlowTheme.of(context).titleMedium.override(
-                            fontFamily: 'Inter',
-                            color: FlutterFlowTheme.of(context).primary,
-                          ),
-                    ),
-                  ),
-                  Text(
-                    'The best of all 3 worlds, Row & Flow offers high intensity rowing and strength intervals followed by athletic based yoga sure to enhance flexible and clear the mind. Yoga mats are provided but bringing your own yoga mat is highly encouraged.',
-                    style: FlutterFlowTheme.of(context).labelLarge,
-                  ),
-                  Divider(
-                    height: 32.0,
-                    thickness: 1.0,
-                    color: FlutterFlowTheme.of(context).alternate,
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                    child: Text(
-                      '30m | High Intensity | Indoor/Outdoor',
-                      style: FlutterFlowTheme.of(context).labelMedium,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 12.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
+                    padding: const EdgeInsets.all(16.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.network(
+                        'https://images.unsplash.com/photo-1579389083078-4e7018379f7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw2fHxvcGVyYXRpb24lMjBtYW5hZ2VtZW50fGVufDB8fHx8MTcwNzA1NDkyOHww&ixlib=rb-4.0.3&q=80&w=1080',
+                        width: MediaQuery.sizeOf(context).width * 1.0,
+                        height: 230.0,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
+                  ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome to the World of understanding Properly your Stream with TopWorker\'s excellent Training Sessions to achieve success in your career, with excellent opportunities at your doorstep with our modules of Personalized skill development and knowledge enhhancement classes.',
+                        style: FlutterFlowTheme.of(context).labelLarge,
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
+                      Divider(
+                        height: 32.0,
+                        thickness: 1.0,
+                        color: FlutterFlowTheme.of(context).alternate,
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
+                        child: Text(
+                          '45 Min Virtual Meeting',
+                          style: FlutterFlowTheme.of(context).labelMedium,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: const AlignmentDirectional(0.0, 0.0),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 24.0),
-                child: FFButtonWidget(
-                  onPressed: () {
-                    print('ButtonPrimary pressed ...');
-                  },
-                  text: 'Reserve Spot',
-                  options: FFButtonOptions(
-                    width: 300.0,
-                    height: 60.0,
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: FlutterFlowTheme.of(context).primary,
-                    textStyle:
-                        FlutterFlowTheme.of(context).headlineSmall.override(
-                              fontFamily: 'Sora',
-                              color: Colors.white,
-                            ),
-                    elevation: 3.0,
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(40.0),
+                    ],
                   ),
                 ),
-              ),
+                Align(
+                  alignment: const AlignmentDirectional(0.0, 0.0),
+                  child: Builder(
+                    builder: (context) => Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 24.0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          if (loggedIn) {
+                            try {
+                              final result =
+                                  await FirebaseFunctions.instanceFor(
+                                          region: 'asia-south1')
+                                      .httpsCallable('generateToken')
+                                      .call({
+                                "channelName": 'TopWorker Skills Development',
+                              });
+                              _model.cloudToken =
+                                  GenerateTokenCloudFunctionCallResponse(
+                                data: result.data,
+                                succeeded: true,
+                                resultAsString: result.data.toString(),
+                                jsonBody: result.data,
+                              );
+                            } on FirebaseFunctionsException catch (error) {
+                              _model.cloudToken =
+                                  GenerateTokenCloudFunctionCallResponse(
+                                errorCode: error.code,
+                                succeeded: false,
+                              );
+                            }
+
+                            if (!_model.cloudToken!.succeeded!) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Token Genrated Successfully',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: const Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                            } else {
+                              await showDialog(
+                                context: context,
+                                builder: (dialogContext) {
+                                  return Dialog(
+                                    elevation: 0,
+                                    insetPadding: EdgeInsets.zero,
+                                    backgroundColor: Colors.transparent,
+                                    alignment: const AlignmentDirectional(0.0, 0.0)
+                                        .resolve(Directionality.of(context)),
+                                    child: SizedBox(
+                                      height: 200.0,
+                                      width: 200.0,
+                                      child: PreJoiningDialogWidget(
+                                        token: _model.cloudToken!.data!,
+                                        channelName:
+                                            'TopWorker Skills Development',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ).then((value) => setState(() {}));
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'You are not a Authorized User',
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: const Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+                          }
+
+                          setState(() {});
+                        },
+                        text: 'Reserve Spot',
+                        options: FFButtonOptions(
+                          width: 300.0,
+                          height: 60.0,
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: FlutterFlowTheme.of(context).primary,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .headlineSmall
+                              .override(
+                                fontFamily: 'Sora',
+                                color: Colors.white,
+                              ),
+                          elevation: 3.0,
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

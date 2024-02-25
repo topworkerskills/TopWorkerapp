@@ -497,6 +497,8 @@ class _CreatetaskWidgetState extends State<CreatetaskWidget>
                                     FlutterFlowTheme.of(context).titleSmall,
                                 inactiveDateStyle:
                                     FlutterFlowTheme.of(context).labelMedium,
+                                locale:
+                                    FFLocalizations.of(context).languageCode,
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(

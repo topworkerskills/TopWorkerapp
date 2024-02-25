@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCaiR91tXIU0c7UawQF5tZotu3yo9-qsJ4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>308769128405</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mycompany.topworkerskillsdevelopment</string>
+	<key>PROJECT_ID</key>
+	<string>top-worker-skills-devel-5l9k5x</string>
+	<key>STORAGE_BUCKET</key>
+	<string>top-worker-skills-devel-5l9k5x.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:308769128405:ios:e4e8e19a29d2031d14475c</string>
+</dict>
+</plist>

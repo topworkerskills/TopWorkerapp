@@ -127,11 +127,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const List02ProductsWidget(),
         ),
         FFRoute(
-          name: 'List13PropertyListview',
-          path: '/list13PropertyListview',
+          name: 'websupport',
+          path: '/websupport',
           builder: (context, params) => params.isEmpty
-              ? const NavBarPage(initialPage: 'List13PropertyListview')
-              : const List13PropertyListviewWidget(),
+              ? const NavBarPage(initialPage: 'websupport')
+              : const WebsupportWidget(),
         ),
         FFRoute(
           name: 'Study',
@@ -187,7 +187,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'OperationManagementclass',
           path: '/operationManagementclass',
-          builder: (context, params) => const OperationManagementclassWidget(),
+          builder: (context, params) => OperationManagementclassWidget(
+            videoMeet: params.getParam('videoMeet', ParamType.bool),
+            appId: params.getParam('appId', ParamType.String),
+            channelName: params.getParam('channelName', ParamType.String),
+            token: params.getParam('token', ParamType.String),
+            isMicEnabled: params.getParam('isMicEnabled', ParamType.bool),
+            isVideoEnabled: params.getParam('isVideoEnabled', ParamType.bool),
+          ),
         ),
         FFRoute(
           name: 'Law',
@@ -205,11 +212,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const MechanicalClassWidget(),
         ),
         FFRoute(
-          name: 'tobedeleted',
-          path: '/tobedeleted',
-          builder: (context, params) => const TobedeletedWidget(),
+          name: 'Courses',
+          path: '/courses',
+          builder: (context, params) => params.isEmpty
+              ? const NavBarPage(initialPage: 'Courses')
+              : const CoursesWidget(),
+        ),
+        FFRoute(
+          name: 'Termsandconditions',
+          path: '/termsandconditions',
+          builder: (context, params) => const TermsandconditionsWidget(),
+        ),
+        FFRoute(
+          name: 'PrivacyPolicy',
+          path: '/privacyPolicy',
+          builder: (context, params) => const PrivacyPolicyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
+      observers: [routeObserver],
     );
 
 extension NavParamExtensions on Map<String, String?> {
@@ -379,6 +399,7 @@ class FFRoute {
           return null;
         },
         pageBuilder: (context, state) {
+          fixStatusBarOniOS16AndBelow(context);
           final ffParams = FFParameters(state, asyncParams);
           final page = ffParams.hasFutures
               ? FutureBuilder(

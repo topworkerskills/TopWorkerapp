@@ -2,7 +2,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
 import 'h_r_class_model.dart';
 export 'h_r_class_model.dart';
 
@@ -23,6 +23,11 @@ class _HRClassWidgetState extends State<HRClassWidget> {
     super.initState();
     _model = createModel(context, () => HRClassModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await launchURL('https://meet.google.com/amg-bvxs-mwx');
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -35,15 +40,6 @@ class _HRClassWidgetState extends State<HRClassWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -82,7 +78,7 @@ class _HRClassWidgetState extends State<HRClassWidget> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
                 child: Image.network(
-                  'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8eW9nYXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+                  'https://images.unsplash.com/photo-1551135049-8a33b5883817?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw0fHxIUnxlbnwwfHx8fDE3MDcwNTA4MjZ8MA&ixlib=rb-4.0.3&q=80&w=1080',
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: 230.0,
                   fit: BoxFit.cover,
@@ -96,21 +92,11 @@ class _HRClassWidgetState extends State<HRClassWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Class Name',
+                    'HR Class',
                     style: FlutterFlowTheme.of(context).headlineMedium,
                   ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
-                    child: Text(
-                      '10:00am',
-                      style: FlutterFlowTheme.of(context).titleMedium.override(
-                            fontFamily: 'Inter',
-                            color: FlutterFlowTheme.of(context).primary,
-                          ),
-                    ),
-                  ),
                   Text(
-                    'The best of all 3 worlds, Row & Flow offers high intensity rowing and strength intervals followed by athletic based yoga sure to enhance flexible and clear the mind. Yoga mats are provided but bringing your own yoga mat is highly encouraged.',
+                    'Welcome to the World of understanding Proper HR Development with TopWorker\'s excellent Training Sessions to achieve success in your career, with excellent opportunities at your doorstep with our modules of Personalized skill development and knowledge enhhancement classes.',
                     style: FlutterFlowTheme.of(context).labelLarge,
                   ),
                   Divider(
@@ -121,234 +107,11 @@ class _HRClassWidgetState extends State<HRClassWidget> {
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                     child: Text(
-                      '30m | High Intensity | Indoor/Outdoor',
+                      '45 M in Virtual Meeting ',
                       style: FlutterFlowTheme.of(context).labelMedium,
                     ),
                   ),
                 ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 12.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 0.0, 12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            width: 64.0,
-                            height: 64.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).accent1,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  'https://images.unsplash.com/photo-1614436163996-25cee5f54290?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1484&q=80',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Kye S',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodySmall
-                                  .override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ),
             Align(
@@ -356,10 +119,40 @@ class _HRClassWidgetState extends State<HRClassWidget> {
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 24.0),
                 child: FFButtonWidget(
-                  onPressed: () {
-                    print('ButtonPrimary pressed ...');
+                  onPressed: () async {
+                    await launchURL('https://meet.google.com/amg-bvxs-mwx');
+
+                    context.pushNamed(
+                      'OperationManagementclass',
+                      queryParameters: {
+                        'appId': serializeParam(
+                          '',
+                          ParamType.String,
+                        ),
+                        'videoMeet': serializeParam(
+                          false,
+                          ParamType.bool,
+                        ),
+                        'channelName': serializeParam(
+                          '',
+                          ParamType.String,
+                        ),
+                        'token': serializeParam(
+                          '',
+                          ParamType.String,
+                        ),
+                        'isMicEnabled': serializeParam(
+                          false,
+                          ParamType.bool,
+                        ),
+                        'isVideoEnabled': serializeParam(
+                          false,
+                          ParamType.bool,
+                        ),
+                      }.withoutNulls,
+                    );
                   },
-                  text: 'Reserve Spot',
+                  text: 'Join the Meeting',
                   options: FFButtonOptions(
                     width: 300.0,
                     height: 60.0,

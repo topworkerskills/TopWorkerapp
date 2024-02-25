@@ -6,7 +6,6 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'taskspage_model.dart';
 export 'taskspage_model.dart';
@@ -80,15 +79,6 @@ class _TaskspageWidgetState extends State<TaskspageWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -268,9 +258,12 @@ class _TaskspageWidgetState extends State<TaskspageWidget>
                                               ),
                                               Text(
                                                 dateTimeFormat(
-                                                    'yMMMd',
-                                                    listViewPlansRecord
-                                                        .dueDate!),
+                                                  'yMMMd',
+                                                  listViewPlansRecord.dueDate!,
+                                                  locale: FFLocalizations.of(
+                                                          context)
+                                                      .languageCode,
+                                                ),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -514,9 +507,13 @@ class _TaskspageWidgetState extends State<TaskspageWidget>
                                                                           0.0),
                                                                   child: Text(
                                                                     dateTimeFormat(
-                                                                        'MMMEd',
-                                                                        listViewTasksRecord
-                                                                            .dueDate!),
+                                                                      'MMMEd',
+                                                                      listViewTasksRecord
+                                                                          .dueDate!,
+                                                                      locale: FFLocalizations.of(
+                                                                              context)
+                                                                          .languageCode,
+                                                                    ),
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -785,9 +782,13 @@ class _TaskspageWidgetState extends State<TaskspageWidget>
                                                                             0.0),
                                                                 child: Text(
                                                                   dateTimeFormat(
-                                                                      'MMMEd',
-                                                                      listViewTasksRecord
-                                                                          .dueDate!),
+                                                                    'MMMEd',
+                                                                    listViewTasksRecord
+                                                                        .dueDate!,
+                                                                    locale: FFLocalizations.of(
+                                                                            context)
+                                                                        .languageCode,
+                                                                  ),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium

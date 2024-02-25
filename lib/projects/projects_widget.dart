@@ -4,7 +4,6 @@ import '/components/createproject_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'projects_model.dart';
 export 'projects_model.dart';
 
@@ -37,15 +36,6 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -218,9 +208,14 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                                                                 0.0, 0.0),
                                                     child: Text(
                                                       dateTimeFormat(
-                                                          'd/M/y',
-                                                          columnAssignmentRecord
-                                                              .dueDate!),
+                                                        'd/M/y',
+                                                        columnAssignmentRecord
+                                                            .dueDate!,
+                                                        locale:
+                                                            FFLocalizations.of(
+                                                                    context)
+                                                                .languageCode,
+                                                      ),
                                                       textAlign:
                                                           TextAlign.start,
                                                       style:
